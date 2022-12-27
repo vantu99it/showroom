@@ -1,0 +1,87 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+a,
+a:hover {
+  text-decoration: none;
+  transition: all 0.3s ease-in-out 0s;
+  -moz-transition: all 0.3s ease-in-out 0s;
+  -o-transition: all 0.3s ease-in-out 0s;
+  -webkit-transition: all 0.3s ease-in-out 0s;
+  -ms-transition: all 0.3s ease-in-out 0s;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+p,
+ul,
+li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1194px !important;
+  }
+}
+.menu{
+    background-color: black;
+    height: 80px;
+    width: 100%;
+}
+.menu ul{
+    display: flex;
+    line-height: 80px;
+}
+.menu ul li{
+    font-weight: bold;
+    margin-right: 30px;
+}
+.menu ul li a{
+    color: white;
+}
+.menu ul li a:hover{
+    color: red;
+}
+.slider{
+    position: relative;
+    z-index: 1;
+}
+.slick-prev{
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    left: 10px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 25px;
+}
+.slick-next{
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    right: 10px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 25px;
+}
