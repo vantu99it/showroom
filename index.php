@@ -1,3 +1,44 @@
+<?php
+  include './include/connect.php';
+// Lấy danh sách tỉnh từ web service
+  function check_broken_link($url){
+      $handle   = curl_init($url);
+      if (false === $handle)
+      {
+          return false;
+      }
+      curl_setopt($handle, CURLOPT_HEADER, false);
+      curl_setopt($handle, CURLOPT_FAILONERROR, true);  // this works
+      curl_setopt($handle, CURLOPT_NOBODY, true);
+      curl_setopt($handle, CURLOPT_RETURNTRANSFER, false);
+      $connectable = curl_exec($handle);
+      curl_close($handle);    
+      return $connectable;
+  }
+  $url = "http://qcvn109.gov.vn/dvhc/XSLT_Tree/dvhc_data.xml";
+  if(check_broken_link($url) === TRUE){
+      $xml = file_get_contents($url);
+      $data = simplexml_load_string($xml);
+      // var_dump($data); die();
+  }
+  else{
+      echo '<tr class="danger"><th colspan="5" style="text-align:center"><h5>KHÔNG THỂ KẾT NỐI ĐẾN MÁY CHỦ VIETCOMBANK</h5></th></tr>';
+  }
+
+//   Gọi ra danh sách showroom theo tỉnh
+if(isset($_POST['btn-search'])){
+    $city = (int) $_POST['select'];
+    $query= $conn -> prepare("SELECT * FROM tbl_showroom WHERE city_id = :city_id");
+    $query-> bindParam(':city_id', $city, PDO::PARAM_STR);
+    $query-> execute();
+    $results = $query->fetchAll(PDO::FETCH_OBJ);
+}else{
+    $query= $conn -> prepare("SELECT * FROM tbl_showroom");
+    $query-> execute();
+    $results = $query->fetchAll(PDO::FETCH_OBJ);
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -247,14 +288,24 @@
                 </div>
             </div>
             <div class="row">
-                <form action="" method="POST">
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
                     <div class="search">
                         <div class="search-address">
                             <p>Chọn địa điểm</p>
-                            <select name="select" id="">
-                                <option value="0">Tỉnh Hà tĩnh</option>
-                                <option value="1">Tỉnh Nghệ An</option>
-                                <option value="2">Tỉnh Thanh Hóa</option>
+                            <select name="select" id="city">
+                            <?php 
+                                if ($data === false) {
+                                    echo '<tr class="danger"><th colspan="5" style="text-align:center"><h5>DỮ LIỆU BỊ LỖI</h5></th></tr>';
+                                }
+                                else {                                      
+                                    foreach ($data as $key => $value) {
+                                    if($value->Cap == "TINH"){?>
+                                        <option value="<?php echo $value->MaDVHC ?>"><?php echo $value->Ten ?></option>
+                                    <?php 
+                                    } 
+                                    } 
+                                } 
+                                ?>
                             </select>
                         </div>
                         <div class="btn-search">
@@ -263,30 +314,20 @@
                     </div>
                 </form>
                 <h2 class="list-showroom">Danh sách Showroom</h2>
-                <div class="col-6">
-                    <div class="search-infor">
-                        <h2>ShowRoom Hà Tĩnh Media</h2>
-                        <div class="phone">
-                            Điện thoại: <a target="target_blank" href="tel:0123456789">0123456789</a>
+                <?php foreach ($results as $key => $value) {?>
+                    <div class="col-6">
+                        <div class="search-infor">
+                            <h2><?php echo $value -> name ?></h2>
+                            <div class="phone">
+                                Điện thoại: <a target="target_blank" href="tel:0123456789"><?php echo $value -> phone ?></a>
+                            </div>
+                            <div class="mail">
+                                Email: <a target="target_blank" href="mailto: nhom@gmail.com"><?php echo $value -> email ?></a>
+                            </div>
+                            <p><?php echo $value -> address ?></p>
                         </div>
-                        <div class="mail">
-                            Email: <a target="target_blank" href="mailto: nhom@gmail.com">nhom@gmail.com</a>
-                        </div>
-                        <p>Địa chỉ: số 198, Thạch Thành, Thanh Đông, Hà Tĩnh</p>
                     </div>
-                </div>
-                <div class="col-6">
-                    <div class="search-infor">
-                        <h2>ShowRoom Hà Tĩnh Media1</h2>
-                        <div class="phone">
-                            Điện thoại: <a target="target_blank" href="tel:0123456789">0123456789</a>
-                        </div>
-                        <div class="mail">
-                            Email: <a target="target_blank" href="mailto: nhom@gmail.com">nhom@gmail.com</a>
-                        </div>
-                        <p>Địa chỉ: số 198, Thạch Thành, Thanh Đông, Hà Tĩnh</p>
-                    </div>
-                </div>
+                <?php }?>
             </div>
         </div>
 
@@ -303,6 +344,7 @@
 <script src="./js/jquery-1.12.4.js"></script>
 <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+</script>
 <script src="./js/main.js"></script>
 
 </html>
