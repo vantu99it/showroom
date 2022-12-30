@@ -36,7 +36,6 @@ if(isset($_POST['btn-search'])){
     $query-> execute();
     $results = $query->fetchAll(PDO::FETCH_OBJ);
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -292,18 +291,18 @@ if(isset($_POST['btn-search'])){
                         <div class="search-address">
                             <p>Chọn địa điểm</p>
                             <select name="select" id="city">
-                            <?php 
+                            <?php
                                 if ($data === false) {
                                     echo '<tr class="danger"><th colspan="5" style="text-align:center"><h5>DỮ LIỆU BỊ LỖI</h5></th></tr>';
                                 }
-                                else {                                      
+                                else {
                                     foreach ($data as $key => $value) {
                                     if($value->Cap == "TINH"){?>
                                         <option value="<?php echo $value->MaDVHC ?>"><?php echo $value->Ten ?></option>
-                                    <?php 
-                                    } 
-                                    } 
-                                } 
+                                    <?php
+                                    }
+                                    }
+                                }
 
                                 ?>
                             </select>
