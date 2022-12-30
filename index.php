@@ -19,12 +19,11 @@
   if(check_broken_link($url) === TRUE){
       $xml = file_get_contents($url);
       $data = simplexml_load_string($xml);
-      // var_dump($data); die();
   }
   else{
-      echo '<tr class="danger"><th colspan="5" style="text-align:center"><h5>KHÔNG THỂ KẾT NỐI ĐẾN MÁY CHỦ VIETCOMBANK</h5></th></tr>';
+      echo '<tr class="danger"><th colspan="5" style="text-align:center"><h5>KHÔNG THỂ KẾT NỐI ĐẾN MÁY CHỦ</h5></th></tr>';
   }
-
+// die();
 //   Gọi ra danh sách showroom theo tỉnh
 if(isset($_POST['btn-search'])){
     $city = (int) $_POST['select'];
@@ -305,6 +304,7 @@ if(isset($_POST['btn-search'])){
                                     } 
                                     } 
                                 } 
+
                                 ?>
                             </select>
                         </div>
