@@ -82,6 +82,9 @@ if(isset($_POST['btn-search'])){
                             </a>
                         </div>
                         <div class="session-title">
+                            <div class="brand-title">
+                                Thương hiệu:<p>Mercedes</p>
+                            </div>
                             <div class="brand">
                                 <a href="#">
                                     <h2>SUZUKI XL7</h2>
@@ -103,6 +106,9 @@ if(isset($_POST['btn-search'])){
                             </a>
                         </div>
                         <div class="session-title">
+                            <div class="brand-title">
+                                Thương hiệu:<p>Mercedes</p>
+                            </div>
                             <div class="brand">
                                 <a href="#">
                                     <h2>SUZUKI XL7</h2>
@@ -124,6 +130,9 @@ if(isset($_POST['btn-search'])){
                             </a>
                         </div>
                         <div class="session-title">
+                            <div class="brand-title">
+                                Thương hiệu:<p>Mercedes</p>
+                            </div>
                             <div class="brand">
                                 <a href="#">
                                     <h2>SUZUKI XL7</h2>
@@ -145,6 +154,9 @@ if(isset($_POST['btn-search'])){
                             </a>
                         </div>
                         <div class="session-title">
+                            <div class="brand-title">
+                                Thương hiệu:<p>Mercedes</p>
+                            </div>
                             <div class="brand">
                                 <a href="#">
                                     <h2>SUZUKI XL7</h2>
@@ -166,6 +178,9 @@ if(isset($_POST['btn-search'])){
                             </a>
                         </div>
                         <div class="session-title">
+                            <div class="brand-title">
+                                Thương hiệu:<p>Mercedes</p>
+                            </div>
                             <div class="brand">
                                 <a href="#">
                                     <h2>SUZUKI XL7</h2>
@@ -187,6 +202,9 @@ if(isset($_POST['btn-search'])){
                             </a>
                         </div>
                         <div class="session-title">
+                            <div class="brand-title">
+                                Thương hiệu:<p>Mercedes</p>
+                            </div>
                             <div class="brand">
                                 <a href="#">
                                     <h2>SUZUKI XL7</h2>
@@ -208,6 +226,9 @@ if(isset($_POST['btn-search'])){
                             </a>
                         </div>
                         <div class="session-title">
+                            <div class="brand-title">
+                                Thương hiệu:<p>Mercedes</p>
+                            </div>
                             <div class="brand">
                                 <a href="#">
                                     <h2>SUZUKI XL7</h2>
@@ -229,6 +250,9 @@ if(isset($_POST['btn-search'])){
                             </a>
                         </div>
                         <div class="session-title">
+                            <div class="brand-title">
+                                Thương hiệu:<p>Mercedes</p>
+                            </div>
                             <div class="brand">
                                 <a href="#">
                                     <h2>SUZUKI XL7</h2>
@@ -250,6 +274,9 @@ if(isset($_POST['btn-search'])){
                             </a>
                         </div>
                         <div class="session-title">
+                            <div class="brand-title">
+                                Thương hiệu:<p>Mercedes</p>
+                            </div>
                             <div class="brand">
                                 <a href="#">
                                     <h2>SUZUKI XL7</h2>
@@ -271,6 +298,33 @@ if(isset($_POST['btn-search'])){
                             </a>
                         </div>
                         <div class="session-title">
+                            <div class="brand-title">
+                                Thương hiệu:<p>Mercedes</p>
+                            </div>
+                            <div class="brand">
+                                <a href="#">
+                                    <h2>SUZUKI XL7</h2>
+                                </a>
+                                <p>500.000 VNĐ</p>
+                            </div>
+                            <div class="line"></div>
+                            <div class="title">
+                                Toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="session">
+                        <div class="image">
+                            <a href="#">
+                                <img src="./image/hinh-nen-xe-oto-dep-1.jpg" alt="image">
+                            </a>
+                        </div>
+                        <div class="session-title">
+                            <div class="brand-title">
+                                Thương hiệu:<p>Mercedes</p>
+                            </div>
                             <div class="brand">
                                 <a href="#">
                                     <h2>SUZUKI XL7</h2>
