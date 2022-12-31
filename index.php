@@ -292,6 +292,7 @@ if(isset($_POST['btn-search'])){
                         <div class="search-address">
                             <p>Chọn địa điểm</p>
                             <select name="select" id="city">
+                                <option value="-1">- Chọn tỉnh -</option>
                             <?php 
                                 if ($data === false) {
                                     echo '<tr class="danger"><th colspan="5" style="text-align:center"><h5>DỮ LIỆU BỊ LỖI</h5></th></tr>';

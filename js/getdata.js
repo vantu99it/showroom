@@ -6,7 +6,7 @@ $(document).ready(function () {
       $("#categories").html("");
       for (i = 0; i < data.length; i++) {
         var categories = data[i];
-        var str = `<option value="${categories["id"]}">
+        var str = `<option value="${categories["brand_id"]}">
           ${categories["brand_name"]}</option>`;
         $("#categories").append(str);
       }
