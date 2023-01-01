@@ -4,7 +4,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  user-select: none;
+  /* user-select: none; */
 }
 
 a,
@@ -182,20 +182,7 @@ li {
   background: #002838;
   color: #ffffff;
 }
-table,
-th {
-  border: 1px solid #868585;
-}
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-table tbody tr:nth-child(odd) {
-  background-color: #eee;
-}
-table tbody tr:nth-child(even) {
-  background-color: rgb(227, 227, 227);
-}
+
 .form-add-infor-car {
   width: 90%;
   height: 600px;
@@ -468,9 +455,6 @@ table tbody tr:nth-child(even) {
     height: 500px;
     background: #f2f0f0;
     border: 1px solid #002838;
-  }
-  .body {
-    position: relative;
   }
   .form-add-showroom {
     position: absolute;

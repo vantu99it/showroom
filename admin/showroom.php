@@ -127,7 +127,7 @@ if (isset($_GET['id'])) {
                                     <tr>
                                         <td><?php echo $key + 1 ?></td>
                                         <td><?php echo $value->name ?></td>
-                                        <td><?php if($value->city_id == $data->MaDVHC){echo $data->Ten;} ?></td>
+                                        <td><?php if($value->city_id == $data->MaDVHC)echo $data->Ten; ?></td>
                                         <td><?php echo $value->phone ?></td>
                                         <td><?php echo $value->email ?></td>
                                         <td class="title_desc"><?php echo $value->address ?></td>
