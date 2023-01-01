@@ -1,6 +1,7 @@
 <?php
   include './include/connect.php';
   include './include/get_city.php';
+//   
 //   Gọi ra danh sách showroom theo tỉnh
 if(isset($_POST['btn-search'])){
     $city = (int) $_POST['select'];
