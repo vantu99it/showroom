@@ -1,5 +1,5 @@
 <?php
-  include './include/connect.php';
+  include './include/connect.php' ;
   include './include/get_city.php';
 //   Gọi ra danh sách showroom theo tỉnh
 if(isset($_POST['btn-search'])){
@@ -66,7 +66,7 @@ if(isset($_POST['btn-search'])){
                                 <a href="#">
                                     <h2>SUZUKI XL7</h2>
                                 </a>
-                                <p>500.000 VNĐ</p>
+                                <p>600.000 VNĐ</p>
                             </div>
                             <div class="line"></div>
                             <div class="title">
