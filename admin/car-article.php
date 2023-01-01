@@ -1,9 +1,60 @@
 <?php
 include "../include/connect.php";
+include "../include/func-slug.php";
+
+$dataBrands = file_get_contents("http://localhost/showroom/api/brandList");
+$databrand = json_decode($dataBrands, true);
+
+$dataVehicles = file_get_contents('http://localhost/showroom/api/vehicleList');
+$dataVehicle = json_decode($dataVehicles, true);
+
 $sql = "SELECT * FROM tbl_car_article";
 $query = $conn->prepare($sql);
 $query->execute();
 $excute = $query->fetchAll(PDO::FETCH_OBJ);
+
+
+
+$querySR = $conn->prepare("SELECT * FROM tbl_showroom");
+$querySR->execute();
+$resultsSR = $querySR->fetchAll(PDO::FETCH_OBJ);
+
+// Thêm
+if(isset($_POST['btn-add'])){
+    $brand_id = $_POST['brand_id'];
+    $vehicles_id = $_POST['vehicles_id'];
+    $detail = $_POST['detail'];
+    $price = $_POST['price'];
+    $showroom_id  = $_POST['showroom_id'];
+    if(isset($_FILES["upload-img"])){
+        $imagePNG = $_FILES["upload-img"]["name"];
+        $imageName = vn2en($imagePNG);  
+        $target_dir = "../image/";
+        $target_file = $target_dir.$imageName;
+        move_uploaded_file($_FILES["upload-img"]["tmp_name"],'./image/'.$imageName);       
+    }
+        $queryCar= $conn -> prepare("INSERT INTO tbl_car_article(brand_id,vehicles_id,detail,price,showroom_id,image) value(:brand_id,:vehicles_id,:detail,:price,:showroom_id,:image)");
+        $queryCar->bindParam(':brand_id',$brand_id,PDO::PARAM_STR);
+        $queryCar->bindParam(':vehicles_id',$vehicles_id,PDO::PARAM_STR);
+        $queryCar->bindParam(':detail',$detail,PDO::PARAM_STR);
+        $queryCar->bindParam(':price',$price,PDO::PARAM_STR);
+        $queryCar->bindParam(':showroom_id',$showroom_id,PDO::PARAM_STR);
+        $queryCar->bindParam(':image',$target_file,PDO::PARAM_STR);
+        $queryCar->execute();
+        $lastInsertId = $conn->lastInsertId();
+        if($lastInsertId){
+            echo "Thành công";
+        }else{
+            echo "Thất bại";
+
+        }
+}
+
+// gọi ra thông tin hiện bảng
+    $queryCaSr = $conn->prepare("SELECT ca.*, sr.name FROM tbl_car_article ca join tbl_showroom sr on sr.id = ca.showroom_id");
+    $queryCaSr->execute();
+    $resultsCaSr = $queryCaSr->fetchAll(PDO::FETCH_OBJ);
+
 ?>
 
 <!DOCTYPE html>
@@ -40,74 +91,66 @@ $excute = $query->fetchAll(PDO::FETCH_OBJ);
                         <table id="my-table" cellpadding="2" cellspacing="2">
                             <thead>
                                 <tr class="first-line">
-                                    <th>STT</th>
-                                    <th>Hãng xe</th>
-                                    <th>Phân khúc</th>
-                                    <th>Giá xe</th>
-                                    <th>Cửa hàng bán</th>
-                                    <th>Hình ảnh</th>
-                                    <th>Chi tiết</th>
-                                    <th><i class="fas fa-cog"></i></th>
+                                    <th style = "width: 6%">STT</th>
+                                    <th style = "width: 10%">Hãng xe</th>
+                                    <th style = "width: 10%">Phân khúc</th>
+                                    <th style = "width: 10%">Giá xe</th>
+                                    <th style = "width: 10%">Cửa hàng bán</th>
+                                    <th style = "width: 8%">Hình ảnh</th>
+                                    <th style = "width: 20%">Chi tiết</th>
+                                    <th style = "width: 6%"><i class="fas fa-cog"></i></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Toyota</td>
-                                    <td>Hạng D</td>
-                                    <td>500.000</td>
-                                    <td>Showrom 1</td>
-                                    <td><img class="img-car" src="./image/hinh-nen-xe-oto-dep-7.jpg" alt=""></td>
-                                    <td class="title_desc">Xe đẹp, 5 chỗ ngồi, giá hợp lý đến từ thị trường của Đức, đọng cơ V1.8 tubor</td>
-                                    <td>
-                                        <div class="del-edit">
-                                            <div class="edit">
-                                                <a href="#"><i class="btn-edit-car fas fa-edit"></i></a>
+                                <?php foreach ($resultsCaSr as $key => $value) {?>
+                                    <tr>
+                                        <td><?php echo $key + 1 ?></td>
+                                        <td>
+                                            <?php foreach ($databrand as $key => $brand) {
+                                                if($brand['brands_id'] == $value->brand_id ){
+                                                    echo $brand['brand_name'];
+                                                }
+                                            } ?>
+                                        </td>
+                                        <td>
+                                            <?php foreach ($dataVehicle as $key => $vehicles) {
+                                                if($vehicles['id'] == $value->vehicles_id  ){
+                                                    echo $vehicles['name'];
+                                                }
+                                            } ?>
+                                        </td>
+                                        <td>
+                                            <?php
+                                                $tien = (int) $value->price;
+                                                $bien =0;
+                                                if(strlen($tien)>=10){
+                                                    $bien =  $tien/1000000000;
+                                                    echo $bien." Tỷ đồng";
+                                                }
+                                                elseif(strlen($tien)>=7 && strlen($tien)<10){
+                                                    $bien =  $tien/1000000;
+                                                    echo $bien." Triệu đồng";
+                                                }else {
+                                                    $bien = number_format($tien,0,",",".");
+                                                    echo $bien." Đồng";
+                                                }
+                                            ?>
+                                        </td>
+                                        <td><?php echo $value-> name ?></td>
+                                        <td><img class="img-car" src="<?php echo $value -> image?>" alt=""></td>
+                                        <td class="title_desc"><?php echo $value -> detail?></td>
+                                        <td>
+                                            <div class="del-edit">
+                                                <div class="edit">
+                                                    <a href="#"><i class="btn-edit-car fas fa-edit"></i></a>
+                                                </div>
+                                                <div class="delete">
+                                                    <a href="#"><i class="delete fas fa-trash-alt"></i></a>
+                                                </div>
                                             </div>
-                                            <div class="delete">
-                                                <a href="#"><i class="delete fas fa-trash-alt"></i></a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Toyota</td>
-                                    <td>Hạng D</td>
-                                    <td>500.000</td>
-                                    <td>Showrom 1</td>
-                                    <td><img class="img-car" src="./image/hinh-nen-xe-oto-dep-7.jpg" alt=""></td>
-                                    <td class="title_desc">Xe đẹp, 5 chỗ ngồi, giá hợp lý đến từ thị trường của Đức, đọng cơ V1.8 tubor</td>
-                                    <td>
-                                        <div class="del-edit">
-                                            <div class="edit">
-                                                <a href="#"><i class="btn-edit-car fas fa-edit"></i></a>
-                                            </div>
-                                            <div class="delete">
-                                                <a href="#"><i class="delete fas fa-trash-alt"></i></a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Toyota</td>
-                                    <td>Hạng D</td>
-                                    <td>500.000</td>
-                                    <td>Showrom 1</td>
-                                    <td><img class="img-car" src="./image/hinh-nen-xe-oto-dep-7.jpg" alt=""></td>
-                                    <td class="title_desc">Xe đẹp, 5 chỗ ngồi, giá hợp lý đến từ thị trường của Đức, đọng cơ V1.8 tubor</td>
-                                    <td>
-                                        <div class="del-edit">
-                                            <div class="edit">
-                                                <a href="#"><i class="btn-edit-car fas fa-edit"></i></a>
-                                            </div>
-                                            <div class="delete">
-                                                <a href="#"><i class="delete fas fa-trash-alt"></i></a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
                             </tbody>
                         </table>
                     </div>
@@ -120,21 +163,18 @@ $excute = $query->fetchAll(PDO::FETCH_OBJ);
                     <h2>Thêm thông tin xe</h2>
                     <a class="close" href="car-article.php"><i class="far fa-window-close"></i></a>
                 </div>
-                <form id="form-add-infor-car" action="" method="POST">
+                <form id="form-add-infor-car" action="" method="POST" enctype="multipart/form-data">
                     <div class="group-add">
                         <p>Hãng xe</p>
-                        <select name="brand" id="brand-id">
-                            <option value="0">Mercedes</option>
-                            <option value="1">Honda</option>
-                            <option value="3">Hyundai</option>
+                        <select name="brand_id" id="brandId">
+                            <option value="-1">Chọn hãng xe</option>
+                            
                         </select>
                     </div>
                     <div class="group-add">
                         <p>Tên xe</p>
-                        <select name="vehicles" id="vehicles-id">
-                            <option value="0">Mercedes GL360s 2019</option>
-                            <option value="1">Honda Civic 2020</option>
-                            <option value="3">Hyundai Elantra 2023</option>
+                        <select name="vehicles_id" id="vehiclesId">
+                            <option value="-1">Chọn tên xe</option>
                         </select>
                     </div>
                     <div class="group-add">
@@ -143,27 +183,21 @@ $excute = $query->fetchAll(PDO::FETCH_OBJ);
                     </div>
                     <div class="group-add">
                         <p>Cửa hàng</p>
-                        <select name="showroom" id="showroom-id">
-                            <option value="0">30, Phạm Kim Đồng, phường Hưng Bình, tp Vinh</option>
-                            <option value="1">40, Phạm Kim Đồng, phường Hưng Bình, tp Vinh</option>
-                            <option value="3">60, Phạm Kim Đồng, phường Hưng Bình, tp Vinh</option>
+                        <select name="showroom_id" id="showroom-id">
+                            <?php foreach ($resultsSR as $key => $value) {?>
+                                <option value="<?php echo $value->id ?>"><?php echo $value->name ?></option>
+                            <?php } ?>
                         </select>
                     </div>
                     <div class="group-add">
                         <p>Chi tiết</p>
-                        <textarea name="desc" class="desc" id="" cols="30" rows="5"></textarea>
+                        <textarea name="detail" class="desc" id="" cols="30" rows="5"></textarea>
                     </div>
                     <div class="group-all-under">
                         <div class="group-all">
                             <div class="group-add">
                                 <p>Hình ảnh</p>
-                                <input type="file">
-                            </div>
-                            <div class="display-img">
-                                <div id="img-select">
-                                    <p>Ảnh mới chọn</p>
-                                    <img src="./image/hinh-nen-xe-oto-dep-7.jpg" alt="image">
-                                </div>
+                                <input type="file" name = "upload-img">
                             </div>
                         </div>
                         <div class="btn-add-car">
@@ -183,9 +217,10 @@ $excute = $query->fetchAll(PDO::FETCH_OBJ);
                     <div class="group-add">
                         <p>Hãng xe</p>
                         <select name="brand-edit" id="brand-id-edit">
-                            <option value="0">Mercedes</option>
-                            <option value="1">Honda</option>
-                            <option value="3">Hyundai</option>
+
+                            <?php foreach ($data as $key => $value) { ?>
+                                <option value="<?php echo $value['brands_id'] ?>"><?php echo $value['brand_name'] ?></option>
+                            <?php } ?>
                         </select>
                     </div>
                     <div class="group-edit">
@@ -246,6 +281,7 @@ $excute = $query->fetchAll(PDO::FETCH_OBJ);
 <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script src="./lib/bootstrap/js/bootstrap.min.js"></script>
 <script src="./js/jquery.dataTables.min.js"></script>
+<script src="../js/getdata.js"></script>
 <script src="./js/admin.js"></script>
 <script>
     $(document).ready(function() {

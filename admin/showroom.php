@@ -25,6 +25,7 @@ if (check_broken_link($url) === TRUE) {
     $data = simplexml_load_string($xml);
 }
 
+
 if (isset($_POST['btn-add-s']) && ($_POST['btn-add-s'])) {
     $name = $_POST['name'];
     $city = $_POST['city'];
@@ -114,7 +115,7 @@ if (isset($_GET['id'])) {
                             <thead>
                                 <tr class="first-line">
                                     <th>STT</th>
-                                    <th>Tên xe</th>
+                                    <th>Tên showroom</th>
                                     <th>Tỉnh</th>
                                     <th>Điện thoại</th>
                                     <th>Email</th>
@@ -127,7 +128,18 @@ if (isset($_GET['id'])) {
                                     <tr>
                                         <td><?php echo $key + 1 ?></td>
                                         <td><?php echo $value->name ?></td>
+<<<<<<< HEAD
                                         <td><?php if($value->city_id == $data->MaDVHC)echo $data->Ten; ?></td>
+=======
+                                        <td>
+                                            <?php foreach ($data as $key1 => $value1) {
+                                                if ($value1->Cap == "TINH"){
+                                                if($value->city_id == $value1->MaDVHC){echo $value1->Ten;}
+                                                }
+                                            }
+                                            ?>
+                                        </td>
+>>>>>>> main
                                         <td><?php echo $value->phone ?></td>
                                         <td><?php echo $value->email ?></td>
                                         <td class="title_desc"><?php echo $value->address ?></td>
@@ -157,7 +169,7 @@ if (isset($_GET['id'])) {
                 </div>
                 <form id="form-add-showroom" action="" method="POST">
                     <div class="group-add">
-                        <p>Tên xe</p>
+                        <p>Tên showroom</p>
                         <input type="text" name="name">
                     </div>
                     <div class="group-add">
