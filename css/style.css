@@ -4,7 +4,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  user-select: none;
+  /* user-select: none; */
 }
 
 a,
@@ -38,64 +38,63 @@ li {
   }
 }
 
-.menu{
-    background-color: rgba(0, 0, 0, 0.7);
-    height: 80px;
-    width: 100%;
-    position: fixed;
-
+.menu {
+  background-color: rgba(0, 0, 0, 0.7);
+  height: 80px;
+  width: 100%;
+  position: fixed;
 }
-.menu ul{
-    display: flex;
-    line-height: 80px;
+.menu ul {
+  display: flex;
+  line-height: 80px;
 }
-.menu ul li{
-    font-weight: bold;
-    margin-right: 30px;
+.menu ul li {
+  font-weight: bold;
+  margin-right: 30px;
 }
-.menu ul li a{
-    color: white;
+.menu ul li a {
+  color: white;
 }
-.menu ul li a:hover{
-    color: red;
+.menu ul li a:hover {
+  color: red;
 }
-.slider{
-    position: relative;
-    z-index: -1;
+.slider {
+  position: relative;
+  z-index: -1;
 }
-.header{
+.header {
   height: 585px;
 }
-.slick-prev{
-    position: absolute;
-    top: 50%;
-    z-index: 2;
-    left: 10px;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 25px;
+.slick-prev {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  left: 10px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 25px;
 }
-.slick-next{
-    position: absolute;
-    top: 50%;
-    z-index: 2;
-    right: 10px;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 25px;
+.slick-next {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  right: 10px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 25px;
 }
-.search{
+.search {
   margin: 20px 0;
   display: flex;
   justify-content: center;
 }
-.btn-search{
+.btn-search {
   margin-top: 24px;
   margin-left: 20px;
 }
-.btn-search input{
+.btn-search input {
   padding: 5px 10px;
   border-radius: 5px;
   border: none;
@@ -104,10 +103,10 @@ li {
   font-size: 14px;
   font-weight: bold;
 }
-.btn-search input:hover{
+.btn-search input:hover {
   background: #00a9c3;
 }
-.search select{
+.search select {
   width: 200px;
   height: 30px;
   border: 3px solid rgb(0, 177, 222);
@@ -115,55 +114,55 @@ li {
   color: rgb(0, 123, 154);
   font-weight: 500;
 }
-.search-address p{
+.search-address p {
   color: rgb(0, 123, 154);
   font-weight: bold;
 }
-.search-infor{
+.search-infor {
   margin-bottom: 30px;
 }
-.list-car{
+.list-car {
   color: rgb(0, 123, 154);
   font-size: 20px;
   text-align: center;
   font-weight: bold;
   margin: 20px 0 10px 0;
 }
-.list-showroom{
+.list-showroom {
   margin-bottom: 20px;
   text-align: center;
 }
-.search-infor h2{
+.search-infor h2 {
   color: rgb(0, 123, 154);
   font-size: 18px;
   margin-bottom: 10px;
 }
-.search-infor .phone{
+.search-infor .phone {
   color: black;
   font-size: 16px;
 }
-.search-infor .phone a{
+.search-infor .phone a {
   color: rgb(0, 123, 154);
   font-size: 16px;
 }
-.search-infor .mail{
+.search-infor .mail {
   color: black;
   font-size: 16px;
 }
-.search-infor .mail a{
+.search-infor .mail a {
   color: rgb(0, 123, 154);
   font-size: 16px;
 }
-.search-infor p{
+.search-infor p {
   color: black;
   font-size: 16px;
 }
-.list-showroom{
+.list-showroom {
   color: rgb(0, 123, 154);
   font-size: 20px;
   font-weight: bold;
 }
-.session{
+.session {
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   -ms-border-radius: 10px;
@@ -174,36 +173,37 @@ li {
   box-shadow: 0px 0px 8px 0px #ccc;
   margin-bottom: 30px;
 }
-.session-title{
+.session-title {
   padding: 5px 5px;
 }
-.image a img{
+.image a img {
   z-index: 10;
   width: 100%;
   height: 400px;
   border-radius: 10px 10px 0 0;
 }
-.session-title .brand{
+.session-title .brand {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   margin: 10px 0;
 }
-.session-title .brand a h2{
+.session-title .brand a h2 {
   color: rgb(0, 100, 120);
   font-size: 25px;
 }
-.session-title .brand p{
+.session-title .brand p {
   color: red;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: bold;
 }
-.session-title .line{
+.session-title .line {
   height: 0.5px;
   width: 100%;
   background-color: rgb(213, 213, 213);
   margin: 10px 0;
 }
-.session-title .title{
+.session-title .title {
   color: black;
   font-size: 16px;
   display: -webkit-box;
@@ -212,18 +212,18 @@ li {
   overflow: hidden;
   margin-bottom: 20px;
 }
-.footer{
+.footer {
   height: 500px;
   position: relative;
   z-index: 1;
 }
-.footer img{
+.footer img {
   width: 100%;
   height: 100%;
   position: absolute;
   z-index: 2;
 }
-.footer h2{
+.footer h2 {
   position: absolute;
   z-index: 3;
   top: 50%;
@@ -234,7 +234,7 @@ li {
   font-size: 28px;
   font-weight: bold;
 }
-.footer p{
+.footer p {
   position: absolute;
   z-index: 3;
   top: 60%;
@@ -244,14 +244,15 @@ li {
   color: #ffffff;
   font-size: 16px;
 }
-.brand-title{
+.brand-title {
   text-align: center;
   font-weight: bold;
   font-size: 16px;
   color: #000000;
   display: flex;
+  align-items: center;
 }
-.brand-title p{
+.brand-title p {
   color: #006474;
   margin-left: 15px;
   font-size: 14px;
