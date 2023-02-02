@@ -29,9 +29,9 @@ if(isset($_POST['btn-add'])){
     if(isset($_FILES["upload-img"])){
         $imagePNG = $_FILES["upload-img"]["name"];
         $imageName = vn2en($imagePNG);  
-        $target_dir = "../image/";
+        $target_dir = "./image/";
         $target_file = $target_dir.$imageName;
-        move_uploaded_file($_FILES["upload-img"]["tmp_name"],'./image/'.$imageName);       
+        move_uploaded_file($_FILES["upload-img"]["tmp_name"],'../image/'.$imageName);       
     }
         $queryCar= $conn -> prepare("INSERT INTO tbl_car_article(brand_id,vehicles_id,detail,price,showroom_id,image) value(:brand_id,:vehicles_id,:detail,:price,:showroom_id,:image)");
         $queryCar->bindParam(':brand_id',$brand_id,PDO::PARAM_STR);
@@ -43,9 +43,9 @@ if(isset($_POST['btn-add'])){
         $queryCar->execute();
         $lastInsertId = $conn->lastInsertId();
         if($lastInsertId){
-            echo "Thành công";
+            // echo "Thành công";
         }else{
-            echo "Thất bại";
+            // echo "Thất bại";
 
         }
 }
@@ -137,7 +137,7 @@ if(isset($_POST['btn-add'])){
                                             ?>
                                         </td>
                                         <td><?php echo $value-> name ?></td>
-                                        <td><img class="img-car" src="<?php echo $value -> image?>" alt=""></td>
+                                        <td><img class="img-car" src=".<?php echo $value -> image?>" alt=""></td>
                                         <td class="title_desc"><?php echo $value -> detail?></td>
                                         <td>
                                             <div class="del-edit">

@@ -1,19 +1,20 @@
 <?php
   include './include/connect.php';
   include './include/get_city.php';
-//   
-//   Gọi ra danh sách showroom theo tỉnh
-if(isset($_POST['btn-search'])){
-    $city = (int) $_POST['select'];
-    $query= $conn -> prepare("SELECT * FROM tbl_showroom WHERE city_id = :city_id");
-    $query-> bindParam(':city_id', $city, PDO::PARAM_STR);
-    $query-> execute();
-    $results = $query->fetchAll(PDO::FETCH_OBJ);
-}else{
-    $query= $conn -> prepare("SELECT * FROM tbl_showroom");
-    $query-> execute();
-    $results = $query->fetchAll(PDO::FETCH_OBJ);
-}
+
+    $dataBrands = file_get_contents("http://localhost/showroom/api/brandList");
+    $databrand = json_decode($dataBrands, true);
+
+    $dataVehicles = file_get_contents('http://localhost/showroom/api/vehicleList');
+    $dataVehicle = json_decode($dataVehicles, true);
+    
+    // Gọi ra ds xe
+    $queryCar= $conn -> prepare("SELECT car.*, sh.name FROM tbl_car_article car JOIN tbl_showroom sh on sh.id = car.showroom_id ");
+    $queryCar-> execute();
+    $resultsCar = $queryCar->fetchAll(PDO::FETCH_OBJ);
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +35,8 @@ if(isset($_POST['btn-search'])){
         <div class="menu">
             <div class="container">
                 <ul>
-                    <li><a href="#">Trang chủ</a></li>
+                    <li><a href="./index.php">Trang chủ</a></li>
+                    <li><a href="./showroom.php">Danh sách showroom</a></li>
                     <li><a href="#">Giới thiệu</a></li>
                     <li><a href="#">Tin tức</a></li>
                 </ul>
@@ -51,314 +53,64 @@ if(isset($_POST['btn-search'])){
     <div class="main">
         <div class="container">
             <h2 class="list-car">Danh sách xe ô tô</h2>
-            <div class="row">
-                <div class="col-4">
-                    <div class="session">
-                        <div class="image">
-                            <a href="#">
-                                <img src="./image/hinh-nen-xe-oto-dep-1.jpg" alt="image">
-                            </a>
-                        </div>
-                        <div class="session-title">
-                            <div class="brand-title">
-                                Thương hiệu:<p>Mercedes</p>
-                            </div>
-                            <div class="brand">
-                                <a href="#">
-                                    <h2>SUZUKI XL7</h2>
-                                </a>
-                                <p>500.000 VNĐ</p>
-                            </div>
-                            <div class="line"></div>
-                            <div class="title">
-                                Toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="session">
-                        <div class="image">
-                            <a href="#">
-                                <img src="./image/hinh-nen-xe-oto-dep-1.jpg" alt="image">
-                            </a>
-                        </div>
-                        <div class="session-title">
-                            <div class="brand-title">
-                                Thương hiệu:<p>Mercedes</p>
-                            </div>
-                            <div class="brand">
-                                <a href="#">
-                                    <h2>SUZUKI XL7</h2>
-                                </a>
-                                <p>500.000 VNĐ</p>
-                            </div>
-                            <div class="line"></div>
-                            <div class="title">
-                                Toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="session">
-                        <div class="image">
-                            <a href="#">
-                                <img src="./image/hinh-nen-xe-oto-dep-1.jpg" alt="image">
-                            </a>
-                        </div>
-                        <div class="session-title">
-                            <div class="brand-title">
-                                Thương hiệu:<p>Mercedes</p>
-                            </div>
-                            <div class="brand">
-                                <a href="#">
-                                    <h2>SUZUKI XL7</h2>
-                                </a>
-                                <p>500.000 VNĐ</p>
-                            </div>
-                            <div class="line"></div>
-                            <div class="title">
-                                Toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc
+                <div class="row">
+                    <?php foreach ($resultsCar as $key => $value) { ?>
+                        <div class="col-4">
+                            <div class="session">
+                                <div class="image">
+                                    <a href="#">
+                                        <img src="<?php echo $value -> image ?>" alt="image">
+                                    </a>
+                                </div>
+                                <div class="session-title">
+                                    <div class="brand-title">
+                                        Thương hiệu:
+                                        <p>
+                                            <?php foreach ($databrand as $key => $brand) {
+                                                if($brand['brands_id'] == $value->brand_id ){
+                                                    echo $brand['brand_name'];
+                                                }
+                                            } ?>
+                                        </p>
+                                    </div>
+                                    <div class="brand">
+                                        <a href="#">
+                                            <h2>
+                                                <?php foreach ($dataVehicle as $key => $vehicles) {
+                                                if($vehicles['id'] == $value->vehicles_id  ){
+                                                    echo $vehicles['name'];
+                                                }
+                                            } ?>
+                                            </h2>
+                                        </a>
+                                        <p>
+                                            <?php
+                                                $tien = (int) $value->price;
+                                                $bien =0;
+                                                if(strlen($tien)>=10){
+                                                    $bien =  $tien/1000000000;
+                                                    echo $bien." Tỷ đồng";
+                                                }
+                                                elseif(strlen($tien)>=7 && strlen($tien)<10){
+                                                    $bien =  $tien/1000000;
+                                                    echo $bien." Triệu đồng";
+                                                }else {
+                                                    $bien = number_format($tien,0,",",".");
+                                                    echo $bien." Đồng";
+                                                }
+                                            ?>
+                                        </p>
+                                    </div>
+                                    <div class="line"></div>
+                                    <div class="title">
+                                        <?php echo $value -> detail?>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="session">
-                        <div class="image">
-                            <a href="#">
-                                <img src="./image/hinh-nen-xe-oto-dep-1.jpg" alt="image">
-                            </a>
-                        </div>
-                        <div class="session-title">
-                            <div class="brand-title">
-                                Thương hiệu:<p>Mercedes</p>
-                            </div>
-                            <div class="brand">
-                                <a href="#">
-                                    <h2>SUZUKI XL7</h2>
-                                </a>
-                                <p>500.000 VNĐ</p>
-                            </div>
-                            <div class="line"></div>
-                            <div class="title">
-                                Toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="session">
-                        <div class="image">
-                            <a href="#">
-                                <img src="./image/hinh-nen-xe-oto-dep-1.jpg" alt="image">
-                            </a>
-                        </div>
-                        <div class="session-title">
-                            <div class="brand-title">
-                                Thương hiệu:<p>Mercedes</p>
-                            </div>
-                            <div class="brand">
-                                <a href="#">
-                                    <h2>SUZUKI XL7</h2>
-                                </a>
-                                <p>500.000 VNĐ</p>
-                            </div>
-                            <div class="line"></div>
-                            <div class="title">
-                                Toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="session">
-                        <div class="image">
-                            <a href="#">
-                                <img src="./image/hinh-nen-xe-oto-dep-1.jpg" alt="image">
-                            </a>
-                        </div>
-                        <div class="session-title">
-                            <div class="brand-title">
-                                Thương hiệu:<p>Mercedes</p>
-                            </div>
-                            <div class="brand">
-                                <a href="#">
-                                    <h2>SUZUKI XL7</h2>
-                                </a>
-                                <p>500.000 VNĐ</p>
-                            </div>
-                            <div class="line"></div>
-                            <div class="title">
-                                Toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="session">
-                        <div class="image">
-                            <a href="#">
-                                <img src="./image/hinh-nen-xe-oto-dep-1.jpg" alt="image">
-                            </a>
-                        </div>
-                        <div class="session-title">
-                            <div class="brand-title">
-                                Thương hiệu:<p>Mercedes</p>
-                            </div>
-                            <div class="brand">
-                                <a href="#">
-                                    <h2>SUZUKI XL7</h2>
-                                </a>
-                                <p>500.000 VNĐ</p>
-                            </div>
-                            <div class="line"></div>
-                            <div class="title">
-                                Toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="session">
-                        <div class="image">
-                            <a href="#">
-                                <img src="./image/hinh-nen-xe-oto-dep-1.jpg" alt="image">
-                            </a>
-                        </div>
-                        <div class="session-title">
-                            <div class="brand-title">
-                                Thương hiệu:<p>Mercedes</p>
-                            </div>
-                            <div class="brand">
-                                <a href="#">
-                                    <h2>SUZUKI XL7</h2>
-                                </a>
-                                <p>500.000 VNĐ</p>
-                            </div>
-                            <div class="line"></div>
-                            <div class="title">
-                                Toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="session">
-                        <div class="image">
-                            <a href="#">
-                                <img src="./image/hinh-nen-xe-oto-dep-1.jpg" alt="image">
-                            </a>
-                        </div>
-                        <div class="session-title">
-                            <div class="brand-title">
-                                Thương hiệu:<p>Mercedes</p>
-                            </div>
-                            <div class="brand">
-                                <a href="#">
-                                    <h2>SUZUKI XL7</h2>
-                                </a>
-                                <p>500.000 VNĐ</p>
-                            </div>
-                            <div class="line"></div>
-                            <div class="title">
-                                Toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="session">
-                        <div class="image">
-                            <a href="#">
-                                <img src="./image/hinh-nen-xe-oto-dep-1.jpg" alt="image">
-                            </a>
-                        </div>
-                        <div class="session-title">
-                            <div class="brand-title">
-                                Thương hiệu:<p>Mercedes</p>
-                            </div>
-                            <div class="brand">
-                                <a href="#">
-                                    <h2>SUZUKI XL7</h2>
-                                </a>
-                                <p>500.000 VNĐ</p>
-                            </div>
-                            <div class="line"></div>
-                            <div class="title">
-                                Toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="session">
-                        <div class="image">
-                            <a href="#">
-                                <img src="./image/hinh-nen-xe-oto-dep-1.jpg" alt="image">
-                            </a>
-                        </div>
-                        <div class="session-title">
-                            <div class="brand-title">
-                                Thương hiệu:<p>Mercedes</p>
-                            </div>
-                            <div class="brand">
-                                <a href="#">
-                                    <h2>SUZUKI XL7</h2>
-                                </a>
-                                <p>500.000 VNĐ</p>
-                            </div>
-                            <div class="line"></div>
-                            <div class="title">
-                                Toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc toyota Fortuner 2022 chắc hẳn là cái tên rất quen thuộc
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-                    <div class="search">
-                        <div class="search-address">
-                            <p>Chọn địa điểm</p>
-                            <select name="select" id="city">
-                            <?php
-                                if ($data === false) {
-                                    echo '<tr class="danger"><th colspan="5" style="text-align:center"><h5>DỮ LIỆU BỊ LỖI</h5></th></tr>';
-                                }
-                                else {
-                                    foreach ($data as $key => $value) {
-                                    if($value->Cap == "TINH"){?>
-                                        <option value="<?php echo $value->MaDVHC ?>"><?php echo $value->Ten ?></option>
-                                    <?php
-                                    }
-                                    }
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="btn-search">
-                            <input type="submit" value="Tìm kiếm" name="btn-search">
-                        </div>
-                    </div>
-                </form>
-                <h2 class="list-showroom">Danh sách Showroom</h2>
-                <?php foreach ($results as $key => $value) {?>
-                    <div class="col-6">
-                        <div class="search-infor">
-                            <h2><?php echo $value -> name ?></h2>
-                            <div class="phone">
-                                Điện thoại: <a target="target_blank" href="tel:0123456789"><?php echo $value -> phone ?></a>
-                            </div>
-                            <div class="mail">
-                                Email: <a target="target_blank" href="mailto: nhom@gmail.com"><?php echo $value -> email ?></a>
-                            </div>
-                            <p><?php echo $value -> address ?></p>
-                        </div>
-                    </div>
-                <?php }?>
-            </div>
+                     <?php } ?>
+                 </div>
+           
         </div>
 
     </div>
