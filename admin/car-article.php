@@ -217,7 +217,6 @@ if(isset($_POST['btn-add'])){
                     <div class="group-add">
                         <p>Hãng xe</p>
                         <select name="brand-edit" id="brand-id-edit">
-
                             <?php foreach ($data as $key => $value) { ?>
                                 <option value="<?php echo $value['brands_id'] ?>"><?php echo $value['brand_name'] ?></option>
                             <?php } ?>
